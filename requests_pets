@@ -42,7 +42,7 @@ try:
     id_new_pet = r.json().get('id')
     print(r.json())
 except:
-    id_new_pet = r.text[7:26]
+    id_new_pet = int(r.text.split(':')[1].split(',')[0])
     print(r.text)
 
 
