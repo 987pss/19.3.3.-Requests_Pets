@@ -10,9 +10,11 @@ headers_get = {'accept': 'application/json'}
 
 r = requests.get(base_url + get_url, params=params_get, headers=headers_get)
 try:
-    print(r.json())
+    result = r.json()
 except:
-    print(r.text)
+    result = r.text
+finally:
+    print(result)
 
 #создание нового питомца
 post_url = '/pet'
@@ -39,11 +41,13 @@ data_post = json.dumps(new_pet)
 
 r = requests.post(base_url + post_url, headers=headers_post, data=data_post)
 try:
-    id_new_pet = r.json().get('id')
-    print(r.json())
+    result = r.json()
+    id_new_pet = result.get('id')
 except:
-    id_new_pet = int(r.text.split(':')[1].split(',')[0])
-    print(r.text)
+    result = r.text
+    id_new_pet = int(result.split(':')[1].split(',')[0])
+finally:
+    print(result)
 
 
 #изменение даных питомца
@@ -71,9 +75,11 @@ data_put = json.dumps(change_pet)
 
 r = requests.put(base_url + put_url, headers=headers_put, data=data_put)
 try:
-    print(r.json())
+    result = r.json()
 except:
-    print(r.text)
+    result = r.text
+finally:
+    print(result)
 
 #удаление питомца
 del_url = f'/pet/{id_new_pet}'
@@ -81,9 +87,11 @@ params_del = {'petId': id_new_pet}
 
 r = requests.delete(base_url + del_url, params=params_del)
 try:
-    print(r.json())
+    result = r.json()
 except:
-    print(r.text)
+    result = r.text
+finally:
+    print(result)
 
 #проверка удалённого питомца по id
 get_url = f'/pet/{id_new_pet}'
@@ -93,8 +101,10 @@ headers_get = {'accept': 'application/json'}
 r = requests.get(base_url + get_url, params=params_get, headers=headers_get)
 if r:
     try:
-        print(r.json())
+        result = r.json()
     except:
-        print(r.text)
+        result = r.text
+    finally:
+        print(result)
 else:
     print('Питомец не найден.')
