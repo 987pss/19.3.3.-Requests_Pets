@@ -1,0 +1,100 @@
+import requests
+import json
+
+base_url = 'https://petstore.swagger.io/v2'
+
+#получение списка питомцев по статусу
+get_url = '/pet/findByStatus'
+params_get = {'status': 'available'}
+headers_get = {'accept': 'application/json'}
+
+r = requests.get(base_url + get_url, params=params_get, headers=headers_get)
+try:
+    print(r.json())
+except:
+    print(r.text)
+
+#создание нового питомца
+post_url = '/pet'
+headers_post = {'accept': 'application/json', 'Content-Type': 'application/json'}
+new_pet = {
+  "id": 0,
+  "category": {
+    "id": 0,
+    "name": "cat"
+  },
+  "name": "Cat",
+  "photoUrls": [
+    "cat_foto"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "cat"
+    }
+  ],
+  "status": "available"
+}
+data_post = json.dumps(new_pet)
+
+r = requests.post(base_url + post_url, headers=headers_post, data=data_post)
+try:
+    id_new_pet = r.json().get('id')
+    print(r.json())
+except:
+    id_new_pet = r.text[7:26]
+    print(r.text)
+
+
+#изменение даных питомца
+put_url = '/pet'
+headers_put = {'accept': 'application/json', 'Content-Type': 'application/json'}
+change_pet = {
+  "id": id_new_pet,
+  "category": {
+    "id": 0,
+    "name": "cat"
+  },
+  "name": "Catty",
+  "photoUrls": [
+    "cat_foto"
+  ],
+  "tags": [
+    {
+      "id": 0,
+      "name": "cat"
+    }
+  ],
+  "status": "available"
+}
+data_put = json.dumps(change_pet)
+
+r = requests.put(base_url + put_url, headers=headers_put, data=data_put)
+try:
+    print(r.json())
+except:
+    print(r.text)
+
+#удаление питомца
+del_url = f'/pet/{id_new_pet}'
+params_del = {'petId': id_new_pet}
+
+r = requests.delete(base_url + del_url, params=params_del)
+try:
+    print(r.json())
+except:
+    print(r.text)
+
+#проверка удалённого питомца по id
+get_url = f'/pet/{id_new_pet}'
+params_get = {'petId': id_new_pet}
+headers_get = {'accept': 'application/json'}
+
+r = requests.get(base_url + get_url, params=params_get, headers=headers_get)
+if r:
+    try:
+        print(r.json())
+    except:
+        print(r.text)
+else:
+    print('Питомец не найден.')
